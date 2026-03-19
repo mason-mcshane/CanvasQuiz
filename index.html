@@ -6,7 +6,7 @@
     <title>CanvasQuiz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 <body>
 
@@ -118,8 +118,11 @@
     </main>
 
     <footer>
-        <span>CanvasQuiz</span>
-        <a href="#" onclick="openFeedback(); return false;">Report an Issue</a>
+        <span>CanvasQuiz <span class="version-badge" onclick="openChangelog(); return false;">v1.0.0</span></span>
+        <div class="footer-links">
+            <a href="#" onclick="openChangelog(); return false;">Changelog</a>
+            <a href="#" onclick="openFeedback(); return false;">Report an Issue</a>
+        </div>
     </footer>
 
     <!-- Feedback Modal -->
@@ -149,4 +152,3 @@
     <script src="app.js"></script>
 </body>
 </html>
-
