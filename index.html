@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanvasQuiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">CQ</div>
+                CanvasQuiz
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div class="mode-toggle">
+                    <button id="btnEdit" class="mode-btn active" onclick="setMode('edit')">Edit</button>
+                    <button id="btnTake" class="mode-btn" onclick="setMode('take')">Take Quiz</button>
+                </div>
+                <button class="theme-toggle" onclick="document.body.classList.toggle('dark')" title="Toggle dark mode">
+                    <span class="icon-moon">🌙</span>
+                    <span class="icon-sun">☀️</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- EDIT MODE -->
+        <section id="editSection">
+            <div class="card builder-card">
+                <h2 class="section-title">Build a Quiz</h2>
+
+                <div class="field-group">
+                    <label for="quizTitle">Quiz Title</label>
+                    <input id="quizTitle" type="text" placeholder="e.g. Chapter 5 Review">
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="field-group">
+                    <label for="qType">Question Type</label>
+                    <select id="qType" onchange="updateAnswerHint()">
+                        <option value="multipleChoice">Multiple Choice</option>
+                        <option value="multipleSelect">Multiple Select</option>
+                        <option value="trueFalse">True / False</option>
+                        <option value="fillBlank">Fill in the Blank</option>
+                        <option value="word">Word Answer</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="qText">Question</label>
+                    <input id="qText" type="text" placeholder="Type your question here">
+                </div>
+
+                <div class="field-group" id="answersGroup">
+                    <label for="qAnswers">
+                        Answers
+                        <span id="answerHint" class="hint">Separate options with \\  e.g. Paris \\ London \\ Berlin \\ Tokyo</span>
+                    </label>
+                    <textarea id="qAnswers" rows="3" placeholder="Paris \\ London \\ Berlin \\ Tokyo"></textarea>
+                </div>
+
+                <div class="field-group" id="correctGroup">
+                    <label for="qCorrect">
+                        Correct Answer
+                        <span id="correctHint" class="hint">Enter the number of the correct option (1, 2, 3...)</span>
+                    </label>
+                    <input id="qCorrect" type="text" placeholder="1">
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-primary" onclick="addQuestion()">+ Add Question</button>
+                </div>
+
+                <div id="addError" class="error-msg"></div>
+            </div>
+
+            <!-- Question List -->
+            <div id="questionList" class="question-list"></div>
+
+            <div class="btn-row centered" id="saveRow" style="display:none">
+                <button class="btn-primary" onclick="saveQuiz()">💾 Save Quiz</button>
+            </div>
+        </section>
+
+        <!-- TAKE MODE -->
+        <section id="takeSection" style="display:none">
+            <div class="card take-header-card">
+                <h2 id="takeTitleDisplay" class="take-title">Select a Quiz Below</h2>
+                <p class="take-subtitle" id="takeSubtitle">Load a saved quiz from the library to begin</p>
+            </div>
+
+            <div id="quiz" class="quiz-questions"></div>
+
+            <div id="submitRow" style="display:none">
+                <button class="btn-primary btn-large" onclick="submitQuiz()">Submit Quiz</button>
+            </div>
+
+            <div id="results" class="results-box" style="display:none"></div>
+            <div id="attemptHistory" class="history-box"></div>
+            <div id="analytics" class="analytics-box"></div>
+        </section>
+
+        <!-- QUIZ LIBRARY -->
+        <section class="library-section">
+            <h2 class="section-title">Quiz Library</h2>
+            <div id="quizList" class="quiz-library"></div>
+            <div id="libraryEmpty" class="empty-state">No saved quizzes yet — build one above and save it!</div>
+        </section>
+
+    </main>
+
+    <footer>
+        <span>CanvasQuiz</span>
+        <a href="#" onclick="openFeedback(); return false;">Report an Issue</a>
+    </footer>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal-overlay" style="display:none">
+        <div class="modal">
+            <h3>Report an Issue</h3>
+            <div class="field-group">
+                <label>Your Name (optional)</label>
+                <input id="fbName" type="text" placeholder="Anonymous">
+            </div>
+            <div class="field-group">
+                <label>Describe the Issue</label>
+                <textarea id="fbMessage" rows="5" placeholder="What went wrong? Please be as specific as possible."></textarea>
+            </div>
+            <div id="fbError" class="error-msg"></div>
+            <div class="btn-row">
+                <button class="btn-secondary" onclick="closeFeedback()">Cancel</button>
+                <button class="btn-primary" onclick="submitFeedback()">Send Report</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
