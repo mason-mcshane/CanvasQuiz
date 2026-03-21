@@ -1,0 +1,160 @@
+/* ── Admin-specific styles ── */
+
+.admin-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--accent);
+    color: white;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.admin-header {
+    margin-bottom: 28px;
+}
+
+.admin-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.admin-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+/* ── Stat grid ── */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    text-align: center;
+    transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.stat-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Admin cards ── */
+.admin-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.admin-card-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Chart ── */
+.chart-container {
+    position: relative;
+    height: 200px;
+}
+
+/* ── Table ── */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.admin-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text);
+}
+
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: var(--bg); }
+
+.admin-table-wrap { overflow-x: auto; }
+
+/* ── Access denied ── */
+#accessDenied {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+}
+
+.denied-box {
+    text-align: center;
+    padding: 40px;
+}
+
+.denied-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.denied-box h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.denied-box p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
