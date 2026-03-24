@@ -219,20 +219,12 @@
 
     <!-- Feedback Modal -->
     <div id="feedbackModal" class="modal-overlay" style="display:none">
-        <div class="modal">
+        <div class="modal modal-narrow">
             <h3>Report an Issue</h3>
-            <div class="field-group">
-                <label>Your Name (optional)</label>
-                <input id="fbName" type="text" placeholder="Anonymous">
-            </div>
-            <div class="field-group">
-                <label>Describe the Issue</label>
-                <textarea id="fbMessage" rows="5" placeholder="What went wrong? Please be as specific as possible."></textarea>
-            </div>
-            <div id="fbError" class="error-msg"></div>
-            <div class="btn-row">
-                <button class="btn-secondary" onclick="closeFeedback()">Cancel</button>
-                <button class="btn-primary" onclick="submitFeedback()">Send Report</button>
+            <p class="feedback-msg">Found a bug or have a suggestion? Reach out directly:</p>
+            <a href="mailto:mason.mcshaneg@gmail.com" class="feedback-email">mason.mcshaneg@gmail.com</a>
+            <div class="btn-row" style="margin-top:20px;justify-content:center;">
+                <button class="btn-secondary" onclick="closeFeedback()">Close</button>
             </div>
         </div>
     </div>
