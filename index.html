@@ -19,20 +19,19 @@
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
                 <div class="mode-toggle">
-                    <button id="btnEdit" class="mode-btn active" onclick="setMode('edit')">Edit</button>
-                    <button id="btnTake" class="mode-btn" onclick="setMode('take')">Take Quiz</button>
+                    <button id="btnEdit" class="mode-btn active">Edit</button>
+                    <button id="btnTake" class="mode-btn">Take Quiz</button>
                 </div>
-                <button class="theme-toggle" onclick="document.body.classList.toggle('dark')" title="Toggle dark mode">
+                <button class="theme-toggle" title="Toggle dark mode">
                     <span class="icon-moon">🌙</span>
                     <span class="icon-sun">☀️</span>
                 </button>
-                <!-- Auth bar -->
                 <div id="authBar">
-                    <button class="btn-auth" id="signInBtn" onclick="openAuth('signin')">Sign In</button>
+                    <button class="btn-auth" id="signInBtn">Sign In</button>
                 </div>
                 <div id="userBar" style="display:none">
                     <span id="userEmail" class="user-email"></span>
-                    <button class="btn-auth-outline" onclick="signOut()">Sign Out</button>
+                    <button class="btn-auth-outline" id="signOutBtn">Sign Out</button>
                 </div>
             </div>
         </div>
@@ -53,7 +52,7 @@
                 <div class="field-row">
                     <div class="field-group" style="flex:1">
                         <label for="qType">Question Type</label>
-                        <select id="qType" onchange="updateAnswerHint()">
+                        <select id="qType">
                             <option value="multipleChoice">Multiple Choice</option>
                             <option value="multipleSelect">Multiple Select</option>
                             <option value="trueFalse">True / False</option>
@@ -87,13 +86,12 @@
                 </div>
 
                 <div class="btn-row">
-                    <button class="btn-primary" onclick="addQuestion()">+ Add Question</button>
+                    <button class="btn-primary" id="addQuestionBtn">+ Add Question</button>
                 </div>
 
                 <div id="addError" class="error-msg"></div>
             </div>
 
-            <!-- Question List -->
             <div id="questionList" class="question-list"></div>
 
             <div class="btn-row centered" id="saveRow" style="display:none">
@@ -103,7 +101,7 @@
                         <span class="toggle-text">Make this quiz public (shareable)</span>
                     </label>
                 </div>
-                <button class="btn-primary" onclick="saveQuiz()">💾 Save Quiz</button>
+                <button class="btn-primary" id="saveQuizBtn">💾 Save Quiz</button>
             </div>
         </section>
 
@@ -117,7 +115,7 @@
             <div id="quiz" class="quiz-questions"></div>
 
             <div id="submitRow" style="display:none">
-                <button class="btn-primary btn-large" onclick="submitQuiz()">Submit Quiz</button>
+                <button class="btn-primary btn-large" id="submitQuizBtn">Submit Quiz</button>
             </div>
 
             <div id="results" class="results-box" style="display:none"></div>
@@ -127,31 +125,39 @@
 
         <!-- QUIZ LIBRARY -->
         <section class="library-section">
-            <h2 class="section-title">Quiz Library</h2>
+            <div class="library-header">
+                <h2 class="section-title" style="margin-bottom:0;border:none;padding:0;">Quiz Library</h2>
+                <div class="library-actions">
+                    <input type="file" id="importFileInput" accept=".json" style="display:none">
+                    <button class="btn-secondary" id="importBtn">⬆️ Import</button>
+                </div>
+            </div>
             <div id="quizList" class="quiz-library"></div>
             <div id="libraryEmpty" class="empty-state">No saved quizzes yet — sign in and build one above!</div>
+            <div id="examBuilderRow" class="exam-builder-row" style="display:none">
+                <span class="exam-hint">Check quizzes above to combine into an exam</span>
+                <button class="btn-primary" id="buildExamBtn">🎓 Build Exam</button>
+            </div>
         </section>
 
     </main>
 
     <footer>
-        <span>CanvasQuiz <span class="version-badge" onclick="openChangelog(); return false;">v1.1.0</span></span>
+        <span>CanvasQuiz <span class="version-badge">v1.2.0</span></span>
         <div class="footer-links">
-            <a href="#" onclick="openChangelog(); return false;">Changelog</a>
-            <a href="#" onclick="openFeedback(); return false;">Report an Issue</a>
+            <a href="#" id="changelogBtn">Changelog</a>
+            <a href="#" id="feedbackBtn">Report an Issue</a>
         </div>
     </footer>
 
     <!-- Auth Modal -->
     <div id="authModal" class="modal-overlay" style="display:none">
         <div class="modal">
-            <h3 id="authModalTitle">Sign In</h3>
-
+            <h3>Sign In</h3>
             <div id="authTabs" class="auth-tabs">
-                <button class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</button>
-                <button class="auth-tab" onclick="switchAuthTab('signup')">Create Account</button>
+                <button class="auth-tab active">Sign In</button>
+                <button class="auth-tab">Create Account</button>
             </div>
-
             <div class="field-group">
                 <label>Email</label>
                 <input id="authEmail" type="email" placeholder="you@example.com">
@@ -160,17 +166,20 @@
                 <label>Password</label>
                 <input id="authPassword" type="password" placeholder="••••••••">
             </div>
-
             <div id="authError" class="error-msg"></div>
-
             <div class="btn-row" style="flex-direction:column;gap:10px;">
-                <button class="btn-primary" style="width:100%" id="authSubmitBtn" onclick="submitAuth()">Sign In</button>
+                <button class="btn-primary" style="width:100%" id="authSubmitBtn">Sign In</button>
                 <div class="auth-divider"><span>or</span></div>
-                <button class="btn-google" onclick="signInWithGoogle()">
-                    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.707A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                <button class="btn-google" id="googleSignInBtn">
+                    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                        <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+                        <path d="M3.964 10.707A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+                        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                    </svg>
                     Continue with Google
                 </button>
-                <button class="btn-secondary" style="width:100%" onclick="closeAuth()">Continue as Guest</button>
+                <button class="btn-secondary" style="width:100%" id="closeAuthBtn">Continue as Guest</button>
             </div>
         </div>
     </div>
@@ -182,8 +191,32 @@
             <h3>You're not signed in</h3>
             <p class="warning-desc">You can still take quizzes as a guest, but you won't be able to save your own quizzes or access them across devices.</p>
             <div class="btn-row" style="flex-direction:column;gap:8px;margin-top:16px;">
-                <button class="btn-primary" style="width:100%" onclick="closeGuestWarning(); openAuth('signin');">Sign In</button>
-                <button class="btn-secondary" style="width:100%" onclick="closeGuestWarning()">Continue as Guest</button>
+                <button class="btn-primary" style="width:100%" id="guestSignInBtn">Sign In</button>
+                <button class="btn-secondary" style="width:100%" id="continueGuestBtn">Continue as Guest</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Builder Modal -->
+    <div id="examModal" class="modal-overlay" style="display:none">
+        <div class="modal">
+            <h3>🎓 Build Combined Exam</h3>
+            <p id="examSelectedNames" class="exam-selected-names"></p>
+            <div class="field-group">
+                <label for="examTitle">Exam Title</label>
+                <input id="examTitle" type="text" placeholder="e.g. Final Exam — Unit 3">
+            </div>
+            <div class="field-group">
+                <label for="examQuestionCount">
+                    Total Questions
+                    <span class="hint">Will be distributed as evenly as possible across selected quizzes</span>
+                </label>
+                <input id="examQuestionCount" type="number" min="1" placeholder="e.g. 20">
+            </div>
+            <div id="examError" class="error-msg"></div>
+            <div class="btn-row">
+                <button class="btn-secondary" id="closeExamBtn">Cancel</button>
+                <button class="btn-primary" id="buildExamSubmitBtn">Create Exam</button>
             </div>
         </div>
     </div>
@@ -193,6 +226,14 @@
         <div class="modal modal-wide">
             <h3>Changelog</h3>
             <div class="changelog-list">
+
+                <div class="changelog-entry">
+                    <div class="changelog-header">
+                        <span class="version-tag">v1.2.0</span>
+                        <span class="changelog-date">March 25, 2026</span>
+                    </div>
+                    <p class="changelog-desc">Added quiz locking, export/import as JSON, and the combined exam builder. Refactored JS into organized modules.</p>
+                </div>
 
                 <div class="changelog-entry">
                     <div class="changelog-header">
@@ -212,7 +253,7 @@
 
             </div>
             <div class="btn-row" style="margin-top:20px;">
-                <button class="btn-secondary" onclick="closeChangelog()">Close</button>
+                <button class="btn-secondary" id="closeChangelogBtn">Close</button>
             </div>
         </div>
     </div>
@@ -224,7 +265,7 @@
             <p class="feedback-msg">Found a bug or have a suggestion? Reach out directly:</p>
             <a href="mailto:mason.mcshaneg@gmail.com" class="feedback-email">mason.mcshaneg@gmail.com</a>
             <div class="btn-row" style="margin-top:20px;justify-content:center;">
-                <button class="btn-secondary" onclick="closeFeedback()">Close</button>
+                <button class="btn-secondary" id="closeFeedbackBtn">Close</button>
             </div>
         </div>
     </div>
@@ -233,6 +274,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
