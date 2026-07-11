@@ -69,52 +69,87 @@ export function renderQuizQuestions() {
     });
 }
 
-// ── Grade the quiz and display results ──
+// ── Grade the quiz, store results, and display review button ──
 export function submitQuiz() {
-    let score = 0;
+    let score   = 0;
+    const results = [];
 
     state.quizData.forEach((q, index) => {
-        let isCorrect = false;
+        let isCorrect   = false;
+        let userAnswer  = null;
 
         if (q.type === "multipleChoice") {
             const sel = document.querySelector(`input[name="q${index}"]:checked`);
-            if (sel) isCorrect = Number(sel.value) === q.correct;
+            if (sel) {
+                userAnswer = Number(sel.value);
+                isCorrect  = userAnswer === q.correct;
+            }
 
         } else if (q.type === "multipleSelect") {
             const checked = [...document.querySelectorAll(`input[name="q${index}"]:checked`)]
                 .map(el => Number(el.value));
             if (checked.length > 0) {
-                isCorrect = [...q.correct].sort().join(",") === checked.sort().join(",");
+                userAnswer = checked;
+                isCorrect  = [...q.correct].sort().join(",") === checked.sort().join(",");
             }
 
         } else if (q.type === "trueFalse") {
             const sel = document.querySelector(`input[name="q${index}"]:checked`);
-            if (sel) isCorrect = (sel.value === "true") === q.correct;
+            if (sel) {
+                userAnswer = sel.value === "true";
+                isCorrect  = userAnswer === q.correct;
+            }
 
         } else if (q.type === "fillBlank" || q.type === "word") {
             const input = document.getElementById(`q${index}_text`);
             if (input?.value.trim()) {
-                isCorrect = input.value.trim().toLowerCase() === q.correct;
+                userAnswer = input.value.trim();
+                isCorrect  = userAnswer.toLowerCase() === q.correct;
             }
         }
 
         if (isCorrect) score++;
+
+        results.push({
+            question:   q.question,
+            type:       q.type,
+            answers:    q.answers,
+            correct:    q.correct,
+            userAnswer,
+            isCorrect,
+            sourceQuiz: q.sourceQuiz || state.currentQuizTitle
+        });
     });
 
     const pct   = state.quizData.length > 0
-        ? Math.round((score / state.quizData.length) * 100)
-        : 0;
+        ? Math.round((score / state.quizData.length) * 100) : 0;
     const label = pct >= 90 ? "Excellent! 🎉"
                 : pct >= 70 ? "Good job! 👍"
                 : pct >= 50 ? "Keep practicing!"
                 : "Keep studying!";
+
+    // Store results in sessionStorage for the review page
+    sessionStorage.setItem("reviewData", JSON.stringify({
+        title:   state.currentQuizTitle,
+        score,
+        total:   state.quizData.length,
+        pct,
+        results
+    }));
 
     const resultsEl = document.getElementById("results");
     resultsEl.style.display = "block";
     resultsEl.innerHTML = `
         <div class="results-score">${score} / ${state.quizData.length}</div>
         <div class="results-label">${pct}% — ${label}</div>
+        <button class="btn-primary" id="reviewBtn" style="margin-top:16px;">
+            📋 Review Answers
+        </button>
     `;
+
+    document.getElementById("reviewBtn").addEventListener("click", () => {
+        window.open("review.html", "_blank");
+    });
 
     saveAttempt(score, state.quizData.length);
     renderAttempts();

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanvasQuiz — Review</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="review.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">CQ</div>
+                CanvasQuiz <span class="review-badge">Review</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <span class="icon-moon">🌙</span>
+                    <span class="icon-sun">☀️</span>
+                </button>
+                <a href="index.html" class="btn-auth-outline">← Back to App</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="reviewMain">
+
+        <div class="review-header card">
+            <h1 class="review-title" id="reviewTitle">Quiz Review</h1>
+            <div class="review-score-row">
+                <span class="review-score" id="reviewScore"></span>
+                <span class="review-pct" id="reviewPct"></span>
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <button class="filter-btn active" data-filter="all">All Questions</button>
+            <button class="filter-btn" data-filter="wrong">❌ Wrong Only</button>
+            <button class="filter-btn" data-filter="correct">✅ Correct Only</button>
+        </div>
+
+        <div id="reviewList"></div>
+
+    </main>
+
+    <div id="noData" style="display:none">
+        <div class="denied-box">
+            <div class="denied-icon">📋</div>
+            <h2>No review data found</h2>
+            <p>Submit a quiz first to review your answers.</p>
+            <a href="index.html" class="btn-primary" style="margin-top:16px;display:inline-block;">
+                Back to App
+            </a>
+        </div>
+    </div>
+
+    <script type="module" src="review.js"></script>
+</body>
+</html>

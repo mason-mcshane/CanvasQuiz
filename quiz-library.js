@@ -142,10 +142,11 @@ export async function loadQuiz(id, title) {
     if (error || !data) { showToast("Failed to load quiz."); return; }
 
     state.quizData = data.map(q => ({
-        type:     q.type,
-        question: q.question,
-        answers:  q.answers,
-        correct:  JSON.parse(q.correct)
+        type:       q.type,
+        question:   q.question,
+        answers:    q.answers,
+        correct:    JSON.parse(q.correct),
+        sourceQuiz: q.source_quiz || title
     }));
 
     state.currentQuizId    = id;

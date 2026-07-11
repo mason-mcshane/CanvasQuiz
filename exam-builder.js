@@ -37,12 +37,12 @@ export async function buildExam() {
     if (!total || total < 1) { errEl.textContent = "Please enter a valid question count."; return; }
     if (checked.length < 2)  { errEl.textContent = "Select at least 2 quizzes."; return; }
 
-    // Load questions from each selected quiz
+    // Load questions from each selected quiz, tagging each with source title
     const groups = [];
     for (const checkbox of checked) {
         const { data } = await db
             .from("questions").select("*").eq("quiz_id", Number(checkbox.dataset.id));
-        if (data) groups.push(data);
+        if (data) groups.push({ title: checkbox.dataset.title, questions: data });
     }
 
     // Distribute as evenly as possible across groups
@@ -55,12 +55,12 @@ export async function buildExam() {
     for (const group of groups) {
         const count    = base + (extra > 0 ? 1 : 0);
         if (extra > 0) extra--;
-        const shuffled = [...group].sort(() => Math.random() - 0.5);
-        selected.push(...shuffled.slice(0, Math.min(count, shuffled.length)));
+        // Shuffle within each source quiz but keep groups in order
+        const shuffled = [...group.questions].sort(() => Math.random() - 0.5);
+        shuffled.slice(0, Math.min(count, shuffled.length)).forEach(q => {
+            selected.push({ ...q, sourceQuiz: group.title });
+        });
     }
-
-    // Final shuffle so questions aren't grouped by source quiz
-    selected.sort(() => Math.random() - 0.5);
 
     if (selected.length === 0) {
         errEl.textContent = "No questions found in selected quizzes.";
@@ -76,11 +76,12 @@ export async function buildExam() {
     if (quizErr) { errEl.textContent = "Failed to save exam."; return; }
 
     const rows = selected.map(q => ({
-        quiz_id:  quizRow.id,
-        type:     q.type,
-        question: q.question,
-        answers:  q.answers,
-        correct:  q.correct
+        quiz_id:   quizRow.id,
+        type:      q.type,
+        question:  q.question,
+        answers:   q.answers,
+        correct:   q.correct,
+        source_quiz: q.sourceQuiz
     }));
 
     const { error: qErr } = await db.from("questions").insert(rows);
