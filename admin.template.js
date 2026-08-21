@@ -4,9 +4,7 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ── YOUR USER ID — paste your UID here, do not commit this to GitHub ──
 const ADMIN_UID = "YOUR_UID_HERE";
 
-// ────────────────────────────────────────────────────────────
 // INIT
-// ────────────────────────────────────────────────────────────
 async function init() {
     const { data: { session } } = await db.auth.getSession();
     const user = session?.user ?? null;
@@ -28,9 +26,7 @@ async function init() {
     ]);
 }
 
-// ────────────────────────────────────────────────────────────
 // STAT CARDS
-// ────────────────────────────────────────────────────────────
 async function loadStatCards() {
     // Total quizzes
     const { count: quizCount } = await db
@@ -69,9 +65,7 @@ async function loadStatCards() {
     document.getElementById("totalUsers").textContent = uniqueUsers;
 }
 
-// ────────────────────────────────────────────────────────────
 // HELPERS
-// ────────────────────────────────────────────────────────────
 function getLast30Days() {
     const days = [];
     for (let i = 29; i >= 0; i--) {
@@ -135,9 +129,7 @@ function buildChart(canvasId, labels, data, label) {
     });
 }
 
-// ────────────────────────────────────────────────────────────
 // USER CHART
-// ────────────────────────────────────────────────────────────
 async function loadUserChart() {
     const since = new Date();
     since.setDate(since.getDate() - 30);
@@ -156,9 +148,7 @@ async function loadUserChart() {
     buildChart("usersChart", days.map(d => d.slice(5)), values, "Active users");
 }
 
-// ────────────────────────────────────────────────────────────
 // QUIZ CHART
-// ────────────────────────────────────────────────────────────
 async function loadQuizChart() {
     const since = new Date();
     since.setDate(since.getDate() - 30);
@@ -175,9 +165,7 @@ async function loadQuizChart() {
     buildChart("quizzesChart", days.map(d => d.slice(5)), values, "Quizzes created");
 }
 
-// ────────────────────────────────────────────────────────────
 // RECENT QUIZZES TABLE
-// ────────────────────────────────────────────────────────────
 async function loadRecentQuizzes() {
     const { data } = await db
         .from("quizzes")
@@ -212,9 +200,7 @@ async function loadRecentQuizzes() {
     `;
 }
 
-// ────────────────────────────────────────────────────────────
 // TOP ATTEMPTED QUIZZES
-// ────────────────────────────────────────────────────────────
 async function loadTopQuizzes() {
     const { data } = await db
         .from("attempts")
@@ -257,9 +243,7 @@ async function loadTopQuizzes() {
     `;
 }
 
-// ────────────────────────────────────────────────────────────
 // TOAST
-// ────────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
     const toast = document.getElementById("toast");

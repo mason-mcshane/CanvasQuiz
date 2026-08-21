@@ -17,10 +17,8 @@ import { setMode, openChangelog,
          closeChangelog, openFeedback,
          closeFeedback }                    from "./ui.js";
 
-// ────────────────────────────────────────────────────────────
 // DOM EVENT LISTENERS
 // Replace all onclick="" attributes with proper listeners here
-// ────────────────────────────────────────────────────────────
 
 // Header — mode toggle
 document.getElementById("btnEdit").addEventListener("click", () => setMode("edit"));
@@ -75,9 +73,7 @@ document.querySelector(".version-badge").addEventListener("click", openChangelog
 document.getElementById("feedbackBtn").addEventListener("click", openFeedback);
 document.getElementById("closeFeedbackBtn").addEventListener("click", closeFeedback);
 
-// ────────────────────────────────────────────────────────────
 // INIT
-// ────────────────────────────────────────────────────────────
 updateAnswerHint();
 initAuth();
 checkSharedQuiz();
